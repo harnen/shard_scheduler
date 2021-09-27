@@ -8,7 +8,7 @@ import sys
 import getopt
 from policy import *
 #from slidingWindow import SlidingWindowPolicy
-from michalPolicy import MichalPolicy
+from shardSchedulerPolicy import ShardSchedulerPolicy
 from futurePolicy import FuturePolicy
 from metis_policy import *
 from itertools import combinations
@@ -346,9 +346,9 @@ def main(argv):
     # Round-robin policy
     policy_list.append(TheoreticBestPolicy(shards_num))
     
-    # MichalPolicy (ShardScheduler)
-    policy_list.append(MichalPolicy(shards_num, intra_shard_cost=1, inter_shard_cost=inter_cost))
-    policy_list.append(MichalPolicy(shards_num, intra_shard_cost=1, inter_shard_cost=inter_cost, use_allignment=True))
+    # ShardSchedulerPolicy
+    policy_list.append(ShardSchedulerPolicy(shards_num, intra_shard_cost=1, inter_shard_cost=inter_cost))
+    policy_list.append(ShardSchedulerPolicy(shards_num, intra_shard_cost=1, inter_shard_cost=inter_cost, use_allignment=True))
 
     # SlidingWindowPolicy
     
@@ -382,7 +382,7 @@ def main(argv):
             results['variant'] = policy.variant
             results['m'] = policy.m
 
-        if isinstance(policy, SlidingWindowPolicy) or isinstance(policy, MichalPolicy):
+        if isinstance(policy, SlidingWindowPolicy) or isinstance(policy, ShardSchedulerPolicy):
             print('Migrations ordered (not necessarily completed migrations due to capacity): ', statsList[0])
             print('Load:', policy.shard_load)
             #num_migrations = statsList[0]
